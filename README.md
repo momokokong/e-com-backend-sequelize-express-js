@@ -1,42 +1,82 @@
-# note-taker-Express.js
+# e-com-backend-sequelize-express-js
 [![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
 ***
 ## Table of content
-- note-taker-Express.js
+- e-com-backend-sequelize-express-js
   - [Description](#Description)
+  - [Walkthrough](#Walkthrough)
   - [Installation](#Installation)
   - [Usage](#Usage)
   - [Tests](#Tests)
   - [Contributing](#Contributing)
   - [License](#License)
   - [Questions](#Questions)
-  - [Screenshot](#Screenshot)
 ***
 ## Description
-This is to setup a Node.js Express backend as the server to take requests for the note taker.  The backend responds to GET, POST and DELETE to interact with the notes.  The note taker frontend(everything in the folder public) is provided by edX Fullstack bootcamp. 
-<br>The helper functions in fsUtils.js are mainly from edX with a tweak to use writeFileSync instead of writeFile.
+This is a project to mimic an e-commerce website backend that utilizes Node.js Sequelize and Postgres database to handle products, categories and tags.  The api routes, database schema and seeded data are provided by UCB edX bootcamp.   
+
+## Walkthrough
+- This is a video walkthough of the installation and API tests. [Walkthrough video](https://drive.google.com/file/d/1mWf51VsKpMft6WrzfPKEIoNwZ91pU4zk/view)
 
 ## Installation
-- The generator requires npm.  [See Node.js installation.](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-1. Clone the repo: https://github.com/momokokong/note-taker-Express.js
+- The backend requires npm and Postgres.  
+  - [Node.js/npm installation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+  - [Postgres installation](https://www.postgresql.org/download/)
+1. Clone the repo: https://github.com/momokokong/e-com-backend-sequelize-express-js
 2. In the terminal, move to where the cloned local repo is.
-3. `npm install`
-   - If it does not automatically install the required module, follow below instructions:
-     - `npm i express@4.19.2`
-     - `npm i short-unique-id@5.2.0`
-4. Start the server by `node server.js` in the terminal.  By default it listens to port 3001. 
+3. `npm install` to install the necessary node modules.
+4. Set up the database schema and seeds data: In the terminal go to the folder db/
+   - `psql -U postgres` you will need to enter the password for Postgres user postgres. In the Postgres bash:
+     - `\i schema.sql` 
+     - exit by `\q`
+5. `npm run seed` to seed the database
+6. `npm run start` to start the server, which without environmental variable should be listening port 3001. 
 
 ## Usage
-1. Once the server is running, open http://localhost:3001 from a browser.
-2. Feel free to play with the note taker from there! You can add, view and delete notes from there.
-3. A public running note taker on Render: https://note-taker-express-js-767d.onrender.com/
-   - It might take a minute to load if the Render instance is in hibernation.  Nudge nudge wakey wakey.
+1. Given this is to test back end, see [Tests](#Tests) for using Insomnia to test the API from http://localhost:3001 
 
 ## Tests
-1. Require [Insomnia](https://insomnia.rest/download), API:
-   - GET notes `https://note-taker-express-js-767d.onrender.com/api/notes` should return the saved notes with id of each note.
-   - POST note `https://note-taker-express-js-767d.onrender.com/api/notes` with a request body containing a JSON object {"title":string,"text":string} would add a new note.  Return status code 400 if the request is bad.
-   - DELETE note `https://note-taker-express-js-767d.onrender.com/api/notes/:id` where id indicates the note you would like to delete.  You can find the id from the GET request.  Return status code 400 if the id is not found. 
+1. Requires [Insomnia](https://insomnia.rest/download), API:
+   - Category 
+     - GET `http://localhost:3001/api/categories/` returns all categories and associated products
+     - GET `http://localhost:3001/api/categories/:id` returns the category with the specific id
+     - POST `http://localhost:3001/api/categories/` creates a new category and returns the category
+       - body format: 
+         ```
+         {
+           "category_name":"Cat"
+         }
+         ```
+     - PUT `http://localhost:3001/api/categories/:id` updates the category with the specific id, same body format as POST
+     - DELETE `http://localhost:3001/api/categories/:id` removes the category with the specific id
+   - Tag
+     - GET `http://localhost:3001/api/tags/` returns all tags and associated products
+     - GET `http://localhost:3001/api/tags/:id` returns the tag with the specific id
+     - POST `http://localhost:3001/api/tags/` creates a new tag and returns the tag
+       - body format: 
+         ```
+         {
+           "tag_name":"Cat"
+         }
+         ```
+     - PUT `http://localhost:3001/api/tags/:id` updates the tag with the specific id, same body format as POST
+     - DELETE `http://localhost:3001/api/tags/:id` removes the tag with the specific id
+   - Product 
+     - GET `http://localhost:3001/api/products/` returns all products and associated tags and categories
+     - GET `http://localhost:3001/api/products/:id` returns the product with the specific id
+     - POST `http://localhost:3001/api/products/` creates a new product and returns the product
+       - body format: 
+         ```
+         {
+           "product_name": "Cat Light Saber",
+           "price": 788.00,
+           "stock": 100,
+           "tagIds": [4, 8]
+         }
+         ```
+     - PUT `http://localhost:3001/api/products/:id` updates the product with the specific id, same body format as POST
+     - DELETE `http://localhost:3001/api/products/:id` removes the product with the specific id
+   
 
 ## Contributing
 Contact me.  Find my information in the [Questions](#Questions) section.
@@ -49,18 +89,3 @@ This project adopts WTFPL license practices. Check the website for license detai
 
 [Po Shin Huang Linkedin profile](https://www.linkedin.com/in/poshinhuang/)
 
-## Screenshot
-- Note Taker landing page.  Click on Get Started to the notes:
-![landing-page](./screenshot/landing-page.png)
-- Notes page starts with no note:  
-![starting-with-no-note](./screenshot/starting-with-no-note.png)
-- Enter something in "Note Title" and "Note Text" sections and then click on Save Note :  
-![adding-note](./screenshot/adding-note.png)
-- Click on the left to read note:  
-![click-on-the-left-to-read-note](./screenshot/click-on-the-left-to-read-note.png)
-- Click on the trash can to delete note:  
-![trash-can-to-delete-note](./screenshot/trash-can-to-delete-note.png)
-- In Insomnia, see the error code for POST:  
-![error-code-for-POST](./screenshot/error-code-for-POST.png)
-- In Insomnia, see the error code for DELETE:  
-![error-code-for-DELETE](./screenshot/error-code-for-DELETE.png)
