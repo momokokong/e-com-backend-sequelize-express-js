@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const { Category, Product } = require('../../models');
 
-// The `/api/categories` endpoint
-
+// Route GET /api/categories to show all categories and associcated products
 router.get('/', async (req, res) => {
   try {
     const categoryData = await Category.findAll({
@@ -12,6 +11,7 @@ router.get('/', async (req, res) => {
     
     if (!categoryData) {
       res.status(404).json({ message: 'No category found in the db' });
+      return;
     }
 
     res.status(200).json(categoryData);
@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Route GET /api/categories/:id to show an id specified category and associcated products
 router.get('/:id', async (req, res) => {
   try {
     const categoryData = await Category.findByPk(req.params.id, {
@@ -28,6 +29,7 @@ router.get('/:id', async (req, res) => {
 
     if (!categoryData) {
       res.status(404).json({ message: 'No category found with that id!' });
+      return;
     }
 
     res.status(200).json(categoryData);
@@ -36,6 +38,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Route POST /api/categories/ to create a category and return the whole json
 router.post('/', async (req, res) => {
   try {
     const categoryData = await Category.create(req.body);
@@ -45,6 +48,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Route PUT /api/categories/:id to update an id specified category
 router.put('/:id', async (req, res) => {
   try {
     const categoryData = await Category.update(
@@ -67,6 +71,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Route DELETE /api/categories/:id to remove a category with the specific
 router.delete('/:id', async (req, res) => {
   try {
     const categoryData = await Category.destroy({
@@ -77,6 +82,7 @@ router.delete('/:id', async (req, res) => {
 
     if (!categoryData) {
       res.status(404).json({ message: 'No reader found with that id!' });
+      return;
     }
 
     res.status(200).json(categoryData);

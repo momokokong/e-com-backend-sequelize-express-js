@@ -8,11 +8,12 @@ router.get('/', async (req, res) => {
   try {
     const productData = await Product.findAll({
       order: [['id', 'ASC']],
-      include: [{ model: Category} , {model: ProductTag, model: Tag}] //model: Category
+      include: [{model: Category} , {model: ProductTag, model: Tag}]
     });
     
     if (!productData) {
       res.status(404).json({ message: 'No product found in the db' });
+      return;
     }
 
     res.status(200).json(productData);
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get one product
+// get one product by id
 router.get('/:id', async (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
@@ -31,7 +32,8 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!productData) {
-      res.status(404).json({ message: 'No product found with that id!' });
+      res.status(404).json({message: 'No product found with that id!' });
+      return;
     }
 
     res.status(200).json(productData);
@@ -127,6 +129,7 @@ router.delete('/:id', async (req, res) => {
 
     if (!productData) {
       res.status(404).json({ message: 'No product found with that id!' });
+      return;
     }
 
     res.status(200).json(productData);
